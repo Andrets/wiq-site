@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Stack } from '@mui/material';
+import { TextField, Button, Container, Stack, Grid } from '@mui/material';
 import { Link } from "react-router-dom";
 
 
@@ -43,13 +43,13 @@ export default function SignUp() {
 
     return (
         <React.Fragment>
-            <h2>Register Form</h2>
+            <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
                     <TextField
                         type="text"
                         variant='outlined'
-                        color='secondary'
+                        color='primary'
                         label="Username"
                         onChange={handleUserNameChange}
                         value={userName}
@@ -60,7 +60,7 @@ export default function SignUp() {
                 <TextField
                     type="email"
                     variant='outlined'
-                    color='secondary'
+                    color='primary'
                     label="Email"
                     onChange={handleEmailChange}
                     value={email}
@@ -71,7 +71,7 @@ export default function SignUp() {
                 <TextField
                     type="password"
                     variant='outlined'
-                    color='secondary'
+                    color='primary'
                     label="Password"
                     onChange={handlePasswordChange}
                     value={password}
@@ -81,7 +81,11 @@ export default function SignUp() {
                 />
                 <Button variant="outlined" color="secondary" type="submit">Register</Button>
             </form>
-            <small>Already have an account?</small>
+            <small>
+                <Grid>
+                    <a href='/login'>Already have an accout?</a>
+                </Grid>
+            </small>
      
         </React.Fragment>
     )
