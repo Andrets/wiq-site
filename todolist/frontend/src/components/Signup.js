@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Stack, Grid } from '@mui/material';
+import { TextField, Button, Container, Stack, Grid, Avatar, Alert } from '@mui/material';
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'; 
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Cookies from 'js-cookie';
 
 
 export default function SignUp() {
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [auth, setAuth] = useState(false);
+    const [register, setRegister] = useState(false);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
     
     const handleUserNameChange = (e) => {
         setUserName(e.target.value)
@@ -20,9 +24,9 @@ export default function SignUp() {
         setPassword(e.target.value)
     }
 
-    function handleSubmit() {
+    function handleSubmit1() {
         const requestOptions = {
-            method: 'POST',
+            method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: userName,
@@ -31,21 +35,32 @@ export default function SignUp() {
             }),
         };
         fetch('/api/signup', requestOptions)
-        .then((response) => {
-            if (response.ok) {
-                setAuth(true)
-                console.log('sign up was successfull')
-            } else {
-                setError('долбаеб')
-            }
+        .then((response) => response.json())
+        .then((data) => {
+            const token = data.token;
+            Cookies.set('token', token)
+            setRegister(true);
+            navigate('/')
+        })
+        .catch((error) => {
+            console.error('error', error)
         })
     }
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        console.log(userName, email, password)
+    }
+
+    
 
     return (
         <React.Fragment>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+            </Avatar>
             <h2>Sign Up</h2>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
+                <Stack spacing={2} direction="column" sx={{marginBottom: 4, minWidth: 400}}>
                     <TextField
                         type="text"
                         variant='outlined'
@@ -56,36 +71,46 @@ export default function SignUp() {
                         fullWidth
                         required
                     />
+                    <TextField
+                        type="email"
+                        variant='outlined'
+                        color='primary'
+                        label="Email"
+                        onChange={handleEmailChange}
+                        value={email}
+                        fullWidth
+                        required
+                        sx={{mb: 4}}
+                    />
+                    <TextField
+                        type="password"
+                        variant='outlined'
+                        color='primary'
+                        label="Password"
+                        onChange={handlePasswordChange}
+                        value={password}
+                        required
+                        fullWidth
+                        sx={{mb: 4}}
+                    />
                 </Stack>
-                <TextField
-                    type="email"
-                    variant='outlined'
-                    color='primary'
-                    label="Email"
-                    onChange={handleEmailChange}
-                    value={email}
-                    fullWidth
-                    required
-                    sx={{mb: 4}}
-                />
-                <TextField
-                    type="password"
-                    variant='outlined'
-                    color='primary'
-                    label="Password"
-                    onChange={handlePasswordChange}
-                    value={password}
-                    required
-                    fullWidth
-                    sx={{mb: 4}}
-                />
-                <Button variant="outlined" color="secondary" type="submit">Register</Button>
-            </form>
-            <small>
                 <Grid>
-                    <a href='/login'>Already have an accout?</a>
+                    <Button variant="contained" color="secondary" type="submit" onClick={handleSubmit1} sx={{marginBottom: 2, marginRight: 7}}>
+                        Sign Up
+                    </Button>
+                    <a href='/login'>Sign In</a>
                 </Grid>
-            </small>
+                {register ? (
+                    <Alert severity='success'>
+                        Sign Up successfull!
+                    </Alert>
+                ) : (
+                    <Alert severity='error'>
+                        Please enter reg data!
+                    </Alert>
+                )}
+
+            </form>
      
         </React.Fragment>
     )

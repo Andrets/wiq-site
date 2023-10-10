@@ -34,6 +34,8 @@
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
     "@mui/styled-engine-sc": "^5.14.12",
+    "js-cookie": "^3.0.5",
+    "react-router-dom": "^6.16.0",
     "styled-components": "^5.3.11"
   }
 }
