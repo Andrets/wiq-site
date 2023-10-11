@@ -17,7 +17,7 @@ export default function App() {
                             </div>
                         } />
                         <Route path='/login' element = {
-                            <div className='center'>
+                            <div>
                                 <Login />
                             </div>
                         } />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Stack, Grid, Avatar, Alert } from '@mui/material';
+import { TextField, Button, Container, Stack, Grid, Avatar, Alert, CssBaseline } from '@mui/material';
 import { Link } from "react-router-dom";
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { useNavigate } from 'react-router-dom'; 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Cookies from 'js-cookie';
@@ -23,6 +24,12 @@ export default function SignUp() {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
     }
+
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark'
+        }
+    })
 
     function handleSubmit1() {
         const requestOptions = {
@@ -55,63 +62,66 @@ export default function SignUp() {
 
     return (
         <React.Fragment>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-            </Avatar>
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="column" sx={{marginBottom: 4, minWidth: 400}}>
-                    <TextField
-                        type="text"
-                        variant='outlined'
-                        color='primary'
-                        label="Username"
-                        onChange={handleUserNameChange}
-                        value={userName}
-                        fullWidth
-                        required
-                    />
-                    <TextField
-                        type="email"
-                        variant='outlined'
-                        color='primary'
-                        label="Email"
-                        onChange={handleEmailChange}
-                        value={email}
-                        fullWidth
-                        required
-                        sx={{mb: 4}}
-                    />
-                    <TextField
-                        type="password"
-                        variant='outlined'
-                        color='primary'
-                        label="Password"
-                        onChange={handlePasswordChange}
-                        value={password}
-                        required
-                        fullWidth
-                        sx={{mb: 4}}
-                    />
-                </Stack>
-                <Grid>
-                    <Button variant="contained" color="secondary" type="submit" onClick={handleSubmit1} sx={{marginBottom: 2, marginRight: 7}}>
-                        Sign Up
-                    </Button>
-                    <a href='/login'>Sign In</a>
-                </Grid>
-                {register ? (
-                    <Alert severity='success'>
-                        Sign Up successfull!
-                    </Alert>
-                ) : (
-                    <Alert severity='error'>
-                        Please enter reg data!
-                    </Alert>
-                )}
+            <ThemeProvider theme={darkTheme}>  
+                <CssBaseline>  
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <h2>Sign Up</h2>
+                    <form onSubmit={handleSubmit}>
+                        <Stack spacing={2} direction="column" sx={{marginBottom: 4, minWidth: 400}}>
+                            <TextField
+                                type="text"
+                                variant='outlined'
+                                color='primary'
+                                label="Username"
+                                onChange={handleUserNameChange}
+                                value={userName}
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                type="email"
+                                variant='outlined'
+                                color='primary'
+                                label="Email"
+                                onChange={handleEmailChange}
+                                value={email}
+                                fullWidth
+                                required
+                                sx={{mb: 4}}
+                            />
+                            <TextField
+                                type="password"
+                                variant='outlined'
+                                color='primary'
+                                label="Password"
+                                onChange={handlePasswordChange}
+                                value={password}
+                                required
+                                fullWidth
+                                sx={{mb: 4}}
+                            />
+                        </Stack>
+                        <Grid>
+                            <Button variant="contained" color="secondary" type="submit" onClick={handleSubmit1} sx={{marginBottom: 2, marginRight: 7}}>
+                                Sign Up
+                            </Button>
+                            <a href='/login'>Sign In</a>
+                        </Grid>
+                        {register ? (
+                            <Alert severity='success'>
+                                Sign Up successfull!
+                            </Alert>
+                        ) : (
+                            <Alert severity='error'>
+                                Please enter reg data!
+                            </Alert>
+                        )}
 
-            </form>
-     
+                    </form>
+                </CssBaseline>
+            </ThemeProvider>
         </React.Fragment>
     )
 }
