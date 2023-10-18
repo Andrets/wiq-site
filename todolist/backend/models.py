@@ -1,15 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
 
 # Create your models here.
-
-class Task(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    due_date = models.DateTimeField(blank=True, null=True)
-    is_completed = models.BooleanField(default=False)
-    priority = models.CharField(
-        max_length=20,
-        choices=[('low', 'Low'), ('medium', 'Medium'), ('high', 'High')],
-        default='medium'
-    )
+class User(AbstractBaseUser):
+    name = models.CharField(max_length=255, unique=True)
+    email = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    username = None
+    
+    USERNAME_FIELD = 'name'
+    REQUIRED_FIELDS = []
+    

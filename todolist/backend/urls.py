@@ -1,12 +1,10 @@
-from django.urls import path, re_path
-from .views import SignUp, Login, CheckToken, LogOut, TaskView, CreateTask
+from django.urls import path
+from .views import SignUp, SignIn, CheckUser, SignOut
 
 
 urlpatterns = [
-    path('signup', SignUp.as_view()),
-    path('login', Login.as_view()),
-    path('check', CheckToken),
-    path('logout', LogOut.as_view()),
-    path('task', TaskView.as_view()),
-    path('create-task', CreateTask.as_view()),
+    path('register', SignUp.as_view()),
+    path('login', SignIn.as_view()),
+    path('checkuser', CheckUser.as_view()),
+    path('signout', SignOut.as_view()),
 ]
