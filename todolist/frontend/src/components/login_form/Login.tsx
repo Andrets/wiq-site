@@ -1,4 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
+import { getAuth } from "../../utils/requests";
+import axios from 'axios';
 import { Box, Container, TextField, Typography, Button, Stack } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler, Controller, useFormState } from "react-hook-form";
@@ -20,35 +22,33 @@ export const Login: FC = () => {
     })
     
     useEffect(() => {
-        fetch('/api/checkuser')
-        .then((response) => {
+        getAuth.then(response => {
             if (response.status === 200) {
+                console.log(response)
                 navigate('/')
             } else {
-                null
+                console.log('Ннихуя')
             }
+        })
+        .catch((error) => {
+            console.log(error)
         })
     }, [])
 
     const onSubmit: SubmitHandler<ISignInForm> = (data) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: data.login,
-                password: data.password,
-            })
-        };
-        fetch('/api/login', requestOptions)
-        .then((response) => {
+        axios.post('http://127.0.0.1:8000/api/login', {
+            name: data.login,
+            password: data.password,
+        }).then((response) => {
             if (response.status === 200) {
-                response.json()
-                .then((data) => {
-                    navigate('/')
-                })
+                console.log('Успех')
+                navigate('/')
             } else {
-                null
+                console.log('не успех')
             }
+        })
+        .catch((error) => {
+            console.log(error)
         })
     }
     

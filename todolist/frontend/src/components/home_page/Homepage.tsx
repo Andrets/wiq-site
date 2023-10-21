@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import Cookies from 'cookies-js';
+import { getAuth, getOut } from '../../utils/requests';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Stack, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -8,25 +8,31 @@ import { Link } from 'react-router-dom';
 export const Homepage: FC = () => {
     const navigate = useNavigate()
     
+    
     useEffect(() => {
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/api/checkuser', requestOptions)
-        .then((response) => {
+        getAuth.then((response) => {
             if (response.status === 200) {
-                null
+                console.log(response)
             } else {
                 navigate('/login')
             }
         })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
     
     const handleOnClick = () => {
-        fetch('/api/signout')
-        .then((response) => {
-            navigate('/login')
+        getOut.then((response) => {
+            if (response.status === 200) {
+                console.log(response)
+                navigate('/login')
+            } else {
+                console.log('Xz')
+            }
+        })
+        .catch((error) => {
+            console.log(error)
         })
     }
     

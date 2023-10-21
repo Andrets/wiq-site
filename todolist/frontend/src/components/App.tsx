@@ -10,15 +10,15 @@ import { MyOrders } from './MyOrders/MyOrders';
 
 function App() {
     return (
-                <Router>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/create-order" element={<CreateOrder />}  />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/" element={<Homepage />} />
-                        <Route path="/myorders" element={<MyOrders />} />
-                    </Routes>
-                </Router>
+            <Router>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/create-order" element={<CreateOrder />}  />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<Homepage />} />
+                    <Route path="/myorders" element={<MyOrders />} />
+                </Routes>
+            </Router>
     )
 }
 
