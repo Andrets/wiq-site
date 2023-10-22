@@ -3,6 +3,7 @@ import { Container, Typography, Button, Stack, TextField } from "@mui/material";
 import { useForm, useFormState, Controller, SubmitHandler } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { usernameValidation, passwordValidation, emailValidation } from './validation';
+import axios from 'axios';
 
 interface ISignUpForm {
     username: string,
@@ -32,21 +33,22 @@ export const Register:FC = () => {
     }, [])
 
     const onSubmit: SubmitHandler<ISignUpForm> = (data) => {
-        const requestOptions = {
+        axios({
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            url: 'http://127.0.0.1:8000/api/register',
+            headers : {
+                'Content-Type': 'application/json',
+            },
+            data: {
                 name: data.username,
-                email: data.email,
                 password: data.password,
-            })
-        }
-        fetch('/api/register', requestOptions)
-        .then((response) => {
+                email: data.email,
+            },
+        }).then((response) => {
             if (response.status === 200) {
-                navigate('/')
+                navigate('/login')
             } else {
-                setError('Error while')
+                null
             }
         })
         .catch((error) => {

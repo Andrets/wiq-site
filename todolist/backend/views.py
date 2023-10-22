@@ -5,6 +5,7 @@ from .serializers import UserSerializer
 from .models import User
 from rest_framework.exceptions import AuthenticationFailed
 import jwt, datetime
+from rest_framework import viewsets
 
 # Create your views here.
 
@@ -17,6 +18,7 @@ class SignUp(APIView):
         return Response(serializer.data)
     
 class SignIn(APIView):
+    
     def post(self, request, format=None):
         name = request.data['name']
         password = request.data['password']

@@ -10,8 +10,6 @@ module.exports = {
     mode,
     devServer: {
         port: 3000,
-        open: true,
-        hot: true,
     },
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     output: {

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { getAuth, getOut } from '../../utils/requests';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Stack, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -10,28 +10,37 @@ export const Homepage: FC = () => {
     
     
     useEffect(() => {
-        getAuth.then((response) => {
+        axios({
+            url: "http://localhost:8000/api/checkuser",
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then((response) => {
             if (response.status === 200) {
-                console.log(response)
+                console.log(response.data)
             } else {
                 navigate('/login')
             }
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.log(error)
         })
     }, [])
     
     const handleOnClick = () => {
-        getOut.then((response) => {
+        axios({
+            url: 'http://localhost:8000/api/signout',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => {
             if (response.status === 200) {
-                console.log(response)
                 navigate('/login')
             } else {
-                console.log('Xz')
+                null
             }
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.log(error)
         })
     }

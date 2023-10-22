@@ -3,10 +3,8 @@ import { Container, Stack, Button, Typography, FormControl, MenuItem, InputLabel
 import { useForm, Controller, SubmitHandler, useFormState } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { useThemeContext } from '../theme/ThemeContextProvider';
 import Select from "react-select";
 import { linkValidation } from './validation';
-import NightModeToggle from '../theme/NightModeToggle';
 
 
 interface IFormOrder {
@@ -32,7 +30,6 @@ interface Services {
 
 export const CreateOrder:FC = () => {
     const navigate = useNavigate()
-    const {theme} = useThemeContext()
     const [services, setServices] = useState<Services[]>([])
     const { handleSubmit, control } = useForm<IFormOrder>()
     const { errors } = useFormState({
@@ -75,9 +72,6 @@ export const CreateOrder:FC = () => {
 
     return (
         <>
-        <ThemeProvider theme={theme}>
-            <CssBaseline>
-                <NightModeToggle />
             <Container maxWidth="sm" className='center'>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Stack direction="column" spacing={12} justifyContent="center">
@@ -137,8 +131,6 @@ export const CreateOrder:FC = () => {
                     </Stack>
                 </form>
             </Container>
-            </CssBaseline>
-        </ThemeProvider>
         </>
     )
 }
