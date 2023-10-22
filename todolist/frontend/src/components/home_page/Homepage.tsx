@@ -10,20 +10,15 @@ export const Homepage: FC = () => {
     
     
     useEffect(() => {
-        axios({
-            url: "http://localhost:8000/api/checkuser",
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        }).then((response) => {
+        axios.get("http://localhost:8000/api/checkuser")
+        .then((response) => {
             if (response.status === 200) {
-                console.log(response.data)
+                navigate('/login')
             } else {
                 navigate('/login')
             }
         }).catch((error) => {
-            console.log(error)
+            console.log('error')
         })
     }, [])
     

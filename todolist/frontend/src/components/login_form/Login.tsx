@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-import { getAuth } from "../../utils/requests";
 import axios from 'axios';
 import { Box, Container, TextField, Typography, Button, Stack } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useForm, SubmitHandler, Controller, useFormState } from "react-hook-form";
 import { loginValidation, passwordValidation } from './validation';
 
@@ -20,23 +19,23 @@ export const Login: FC = () => {
     const { errors } = useFormState({
         control
     })
-    
+
     useEffect(() => {
-        getAuth.then(response => {
+        axios.get("http://localhost:8000/api/checkuser")
+        .then(response => {
             if (response.status === 200) {
-                console.log(response)
                 navigate('/')
             } else {
                 console.log('Ннихуя')
             }
         })
         .catch((error) => {
-            console.log(error)
+            console.log('ERROR')
         })
     }, [])
 
     const onSubmit: SubmitHandler<ISignInForm> = (data) => {
-        axios.post('http://127.0.0.1:8000/api/login', {
+        axios.post('http://localhost:8000/api/login', {
             name: data.login,
             password: data.password,
         }).then((response) => {
@@ -51,6 +50,7 @@ export const Login: FC = () => {
             console.log(error)
         })
     }
+    
     
     return (
         <>
@@ -96,7 +96,7 @@ export const Login: FC = () => {
                             <Typography variant='h6'>
                                 Do not have account?
                             </Typography>
-                            <a href="/register">SignUp</a>
+                            <Link to="/register">SignUp</Link>
                         </Stack> 
                         <Button type="submit" variant="contained">
                             Login

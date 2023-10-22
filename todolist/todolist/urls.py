@@ -21,7 +21,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('backend.urls')),
-    path('api/task', include('backend.task.urls')),
-    path('api/wiq', include('backend.wiq.urls')),
-    path('api/qiwi', include('backend.qiwi.urls')),
+    path('api/task/', include('backend.task.urls')),
+    path('api/wiq/', include('backend.wiq.urls')),
+    path('api/qiwi/', include('backend.qiwi.urls')),
 ]

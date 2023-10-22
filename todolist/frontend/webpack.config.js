@@ -10,12 +10,14 @@ module.exports = {
     mode,
     devServer: {
         port: 3000,
+        historyApiFallback: true,
     },
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     output: {
         path: outputDirectory,
         clean: true,
-        filename: '[name].js'
+        filename: '[name].js',
+        publicPath: '/',
     },
     module: {
         rules: [

@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { Container, Stack, Button, Typography, FormControl, MenuItem, InputLabel, TextField } from '@mui/material';
 import { useForm, Controller, SubmitHandler, useFormState } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import axios from 'axios';
 import Select from "react-select";
 import { linkValidation } from './validation';
 
@@ -37,36 +37,25 @@ export const CreateOrder:FC = () => {
     })
 
     useEffect(() => {
-        fetch('/api/wiq/insta-services')
+        axios.get('http://localhost:8000/api/wiq/insta-services')
         .then((response) => {
             if (response.status === 200) {
-                response.json()
-                .then((data) => {
-                    setServices(data)
-                })
+                const data = response.data
+                setServices(data)
+            } else {
+                console.log('error')
             }
+        }).catch((error) => {
+            console.log('error', error)
         })
     }, [])
     
     const onSubmit: SubmitHandler<IFormOrder> = (data) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                service: data.service.value,
-                quantity: data.quantity,
-                nickname: data.nickname,
-            })
-        }
-        fetch('/api/wiq/create-order', requestOptions)
-        .then((response) => {
-            if (response.status === 201) {
-                navigate('/myorders')
-            } else {
-                null
-            }
+        axios.post('http://localhost:8000/api/wiq/create-order',
+        {
+            service: data.service.value,
+            quantity: data.quantity,
+            nickname: data.nickname,
         })
     }
 

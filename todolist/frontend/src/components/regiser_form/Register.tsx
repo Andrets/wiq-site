@@ -35,7 +35,7 @@ export const Register:FC = () => {
     const onSubmit: SubmitHandler<ISignUpForm> = (data) => {
         axios({
             method: 'POST',
-            url: 'http://127.0.0.1:8000/api/register',
+            url: 'http://localhost:8000/api/register',
             headers : {
                 'Content-Type': 'application/json',
             },
