@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Container, Stack, Button, Typography, FormControl, MenuItem, InputLabel, TextField } from '@mui/material';
+import { Container, Stack, Button, Typography, FormControl, MenuItem, InputLabel, TextField, Box } from '@mui/material';
 import { useForm, Controller, SubmitHandler, useFormState } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -37,16 +37,18 @@ export const CreateOrder:FC = () => {
     })
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/wiq/insta-services')
+        fetch('http://localhost:8000/api/wiq/insta-services')
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data
-                setServices(data)
+                response.json()
+                .then((data) => {
+                    setServices(data)
+                })
             } else {
-                console.log('error')
+                console.log('false')
             }
         }).catch((error) => {
-            console.log('error', error)
+            console.log(error)
         })
     }, [])
     
@@ -74,7 +76,7 @@ export const CreateOrder:FC = () => {
                                         value={ field.value || "" }
                                         options={services.map((service) => ({
                                             value: service.id,
-                                            label: service.name
+                                            label: service.name,
                                         }))}
                                     />
                                 )}
@@ -111,6 +113,9 @@ export const CreateOrder:FC = () => {
                                 )} 
                              />
                         </FormControl>
+                        <Box>
+                            <h1>Ваша стоимость: </h1>
+                        </Box>
                         <Button
                             type="submit"
                             variant="contained"

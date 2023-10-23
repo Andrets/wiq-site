@@ -8,7 +8,7 @@ import pytz
 BASE_URL = 'https://api.qiwi.com/partner/bill/v1/bills/'
 
 current_datetime = datetime.datetime.utcnow()
-expiration_datetime = current_datetime + datetime.timedelta(minutes=60)
+expiration_datetime = current_datetime + datetime.timedelta(minutes=15)
 expiration_datetime = expiration_datetime.replace(tzinfo=pytz.UTC)
 expiration_datetime_str = expiration_datetime.isoformat()
 
@@ -25,7 +25,6 @@ def invoice_order(billid, amount_currency, amount_value):
         },
         "expirationDateTime": expiration_datetime_str,
         "customFields": {
-            "paySourcesFilter": "qw",
             "themeCode": "Yvan-YKaSh",
         },
     }

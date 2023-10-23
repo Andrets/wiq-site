@@ -21,17 +21,6 @@ export const Register:FC = () => {
         control
     })
 
-    useEffect(() => {
-        fetch('/api/checkuser')
-        .then((response) => {
-            if (response.ok) {
-                navigate('/')
-            } else {
-                null
-            }
-        })
-    }, [])
-
     const onSubmit: SubmitHandler<ISignUpForm> = (data) => {
         axios({
             method: 'POST',
