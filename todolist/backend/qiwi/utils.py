@@ -12,7 +12,7 @@ expiration_datetime = current_datetime + datetime.timedelta(minutes=15)
 expiration_datetime = expiration_datetime.replace(tzinfo=pytz.UTC)
 expiration_datetime_str = expiration_datetime.isoformat()
 
-def invoice_order(billid, amount_currency, amount_value):
+def invoice_order(billid, amount_value):
     headers = {
         "Authorization": "Bearer " + PRIVATE_KEY,
         "Content-Type": "application/json",
@@ -20,7 +20,7 @@ def invoice_order(billid, amount_currency, amount_value):
     }
     params = {
         "amount": {
-            "currency": amount_currency,
+            "currency": "RUB",
             "value": amount_value,
         },
         "expirationDateTime": expiration_datetime_str,
@@ -31,7 +31,9 @@ def invoice_order(billid, amount_currency, amount_value):
     url = f'https://api.qiwi.com/partner/bill/v1/bills/{billid}'
     response = requests.put(url=url, json=params, headers=headers).json()
     
-    return response
+    payUrl = response['payUrl']
+    
+    return payUrl
 
 def reject_invoice(billid):
     headers = {

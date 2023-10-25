@@ -1,22 +1,43 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Stack, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { CreateOrder } from '../create_order/CreateOrder';
-import { useForm, SubmitHandler, Controller, useFormState } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
 
 
 interface IFormOrder {
-    service: number
+    service: number,
     quantity: number,
     nickname: string,
 }
 
+interface ServiceCost {
+    cost: number;
+    ID: number, 
+}
+
+interface IQiwiPayment {
+    amount_currency: string,
+    amount_value: number,
+}
 
 export const Homepage: FC = () => {
     const navigate = useNavigate()
+    const defaultValue = 1;
+    const [serviceCost, setServiceCost] = useState<ServiceCost | any>()
+    const [qiwiPayment, setQiwiPayment] = useState(0)
+    const [currency, setCurrency] = useState('RUB')
     const { handleSubmit, control } = useForm<IFormOrder>();
+    const service = useWatch({
+        control,
+        name: "service",
+    })
+    const quantity = useWatch({
+        control,
+        name: "quantity",
+    })
     const handleOutClick = () => {
         axios.get('http://localhost:8000/api/signout', {
             headers: { 'Content-Type': 'application/json' }
@@ -30,6 +51,7 @@ export const Homepage: FC = () => {
             console.log(error)
         })
     }
+    
 
     const onSubmit: SubmitHandler<IFormOrder> = (data) => {
         axios.post('http://localhost:8000/api/wiq/create-order',
@@ -37,6 +59,49 @@ export const Homepage: FC = () => {
             service: data.service,
             quantity: data.quantity,
             nickname: data.nickname,
+        })
+    }
+
+    useEffect(() => {
+        fetch('http://localhost:8000/api/wiq/insta-services')
+        .then((response) => {
+            if (response.status === 200) {
+                response.json()
+                .then((data) => {
+                    const serv = data.find((item: { ID: any; }) => item.ID === service)
+                    if (serv) {
+                        const cost: number = serv.cost
+                        const finalcost: any = ((cost * 98) / 1000).toFixed(2)
+                        setServiceCost(finalcost)
+                    } else {
+                        console.log('Не удача')
+                    }
+                })
+                if (serviceCost) {
+                    const payment: any = ((quantity * serviceCost) / 0.65).toFixed(2)
+                    setQiwiPayment(payment)
+                }
+            } else {
+                console.log("Ошибка в запросе!")
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
+    }, [() => {}])
+
+    const submitPayment = () => {
+        axios.post('http://localhost:8000/api/qiwi/invoice-form', {
+                amount_value: qiwiPayment,
+            }).then((response) => {
+            if (response.status === 200) {
+                console.log('Передресируем чувака')
+                const redirect = response.data
+                window.location.href = redirect
+            } else {
+                console.log('я ебался')
+            }
+        }).catch((error) => {
+            console.log(error)
         })
     }
 
@@ -79,8 +144,8 @@ export const Homepage: FC = () => {
             </div>
             <div className="main-container">
                 <main className="main-section">
-                    <section>
-                        <h2 className="CreateOrder-tag">Создай свой заказ</h2>
+                    <section className="left-section">
+                        <h1 className="CreateOrder-tag">Создай свой заказ</h1>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h3 className="Service-tag">Выберите сервис</h3>
                             <Controller
@@ -180,8 +245,12 @@ export const Homepage: FC = () => {
                             </button>
                         </form>
                     </section>
-                    <section>
-                        <div>asddsad</div>
+                    <section className="right-section">
+                        <h1>Ваша стоимость заказа состовляет: {qiwiPayment} RUB</h1>
+                        <img src="images/qiwi.svg" alt="Qiwi" className="qiwi-icon" />
+                        <button type="submit" className="submit-button" onClick={submitPayment}>
+                            Оплатить
+                        </button>
                     </section>
                 </main>
             </div>

@@ -39,13 +39,6 @@ class CreateOrder(APIView):
 
 class InstaSubsServiceList(APIView):
     def get(self, request, format=None):
-        token = request.COOKIES.get('jwt')
-        if not token:
-            raise AuthenticationFailed('Do not have JWT token')
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.exceptions.ExpiredSignatureError:
-            raise AuthenticationFailed('JWT token has been expired')
         
         list = get_insta_subs_service()
         return JsonResponse(list, safe=False, status=status.HTTP_200_OK)
